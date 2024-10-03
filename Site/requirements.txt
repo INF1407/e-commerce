@@ -1,2 +1,2 @@
 django
-Pillow==9.2.0
+Pillow==10.4.0
