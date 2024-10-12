@@ -1,0 +1,12 @@
+<h2>{{ product.name }}</h2>
+<p>{{ product.description }}</p>
+<p class="price">${{ product.price }}</p>
+
+<!-- Add to Cart Form -->
+<form action="{% url 'cart:cart_add' product.id %}" method="post">
+    {{ cart_product_form }}  <!-- The form will display quantity and hidden override input -->
+    {% csrf_token %}
+    <input type="submit" value="Add to cart">
+</form>
+
+<p>{{ product.description|linebreaks }}</p>
