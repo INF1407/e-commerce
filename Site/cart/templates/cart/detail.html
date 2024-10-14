@@ -1,50 +1,52 @@
-{% extends "shop/base.html" %}
-{% block title %}Your shopping cart{% endblock %}
+{% extends "shop/base.html" %} {% block title %}Your shopping cart{% endblock %}
 {% block content %}
 <h1>Your shopping cart</h1>
 <table>
-    <thead>
-        <tr>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Remove</th>
-            <th>Unit price</th>
-            <th>Price</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for item in cart %}
-    {% with product=item.product %}
+  <thead>
     <tr>
-        <td>{{ product.name }}</td>
-        <td>
-            <form action="{% url 'cart:cart_add' product.id %}" method="post">
-                {{ item.update_quantity_form.quantity }}
-                {{ item.update_quantity_form.override }}
-                <input type="submit" value="Update">
-                {% csrf_token %}
-            </form>
-        </td>
-        <td>
-            <form action="{% url 'cart:cart_remove' product.id %}" method="post">
-                <input type="submit" value="Remove">
-                {% csrf_token %}
-            </form>
-        </td>
-        <td>${{ item.price }}</td>
-        <td>${{ item.total_price }}</td>
+      <th>Product</th>
+      <th>Quantity</th>
+      <th>Remove</th>
+      <th>Unit price</th>
+      <th>Price</th>
     </tr>
-    {% endwith %}
-    {% endfor %}
+  </thead>
+  <tbody>
+    {% for item in cart %} {% with product=item.product %}
     <tr>
-        <td>Total</td>
-        <td colspan="3"></td>
-        <td>${{ cart.get_total_price }}</td>
+      <td>
+        <a href="{{ product.get_absolute_url }}">
+          <img src="{% if product.image %}{{ product.image.url }} {% else %}{%
+          static "img/no_image.png" %}{% endif %}">
+        </a>
+      </td>
+      <td>{{ product.name }}</td>
+      <td>
+        <form action="{% url 'cart:cart_add' product.id %}" method="post">
+          {{ item.update_quantity_form.quantity }}
+          {{item.update_quantity_form.override }}
+          <input type="submit" value="Update" />
+          {% csrf_token %}
+        </form>
+      </td>
+      <td>
+        <form action="{% url 'cart:cart_remove' product.id %}" method="post">
+          <input type="submit" value="Remove" />
+          {% csrf_token %}
+        </form>
+      </td>
+      <td>${{ item.price }}</td>
+      <td>${{ item.total_price }}</td>
     </tr>
-    </tbody>
+    {% endwith %} {% endfor %}
+    <tr>
+      <td>Total</td>
+      <td colspan="3"></td>
+      <td>${{ cart.get_total_price }}</td>
+    </tr>
+  </tbody>
 </table>
 <p>
-    <a href="{% url 'shop:product_list' %}">Continue shopping</a>
-    <a href="{% url 'orders:order_create' %}" class="button">Checkout</a>  <!-- Added checkout button -->
+  <a href="{% url 'shop:product_list' %}">Continue shopping</a>
 </p>
 {% endblock %}
