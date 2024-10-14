@@ -4,13 +4,20 @@ from shop.models import Product
 
 class Cart:
     def __init__(self, request):
+        """
+        inicializa o carrinho
+        """
         self.session = request.session
         cart = self.session.get(settings.CART_SESSION_ID)
         if not cart:
+            # alva um carrinho vazio na sessão
             cart = self.session[settings.CART_SESSION_ID] = {}
         self.cart = cart
 
     def add(self, product, quantity=1, override_quantity=False):
+        """
+        Adiciona um produto ao carrinho ou atualiza sua quantidade
+        """
         product_id = str(product.id)
         if product_id not in self.cart:
             self.cart[product_id] = {'quantity': 0, 'price': str(product.price)}
@@ -21,6 +28,7 @@ class Cart:
         self.save()
 
     def save(self):
+        # marca a sessão como modificada para ter certeza de que foi salva
         self.session.modified = True
 
     def remove(self, product):
