@@ -82,7 +82,8 @@ table.cart {
 }
 
 table.cart img {
-  width: 180px;
+  width: 100px; /* This ensures the product image in the cart is 100px wide */
+  height: auto; /* This ensures the image keeps its aspect ratio */
 }
 
 tbody td.num {
@@ -336,4 +337,11 @@ form div.field {
   background: #efefef;
   color: #666;
   border-radius: 4px;
+}
+
+.cart-product-img {
+  max-width: 150px;
+  max-height: 150px;
+  width: auto;
+  height: auto;
 }
