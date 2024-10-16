@@ -83,9 +83,14 @@ WSGI_APPLICATION = 'Site.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default='sqlite:///' + str(BASE_DIR / 'db.sqlite3')  # Fallback to SQLite for local development
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': 'db',  # This is the container name for PostgreSQL
+        'PORT': 5432,
+    }
 }
 
 
@@ -141,3 +146,22 @@ LOGOUT_URL = 'account:logout'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 django_on_heroku.settings(locals())
+
+REDIS_URL = 'redis://cache:6379'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': REDIS_URL,
+    }
+}
+
+# If you're using Django Channels, also configure Redis for channels:
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [(REDIS_URL)],
+        },
+    },
+}
